@@ -10,7 +10,7 @@ repository = "https://github.com/timofurrer/retry"
 edition = "2018"
 
 [[bin]]
-name = "retry"
+name = "retry-cmd"
 path = "src/main.rs"
 
 [dependencies]
