@@ -1,17 +1,22 @@
 [package]
 name = "retry-cmd"
-version = "0.4.1"
+version = "0.4.2"
 authors = ["Timo Furrer <tuxtimo@gmail.com>"]
 description = "Retry commands on the command line without all the loops you always used!"
 readme = "README.md"
 license = "MIT"
-homepage = "https://github.com/timofurrer/retry"
-repository = "https://github.com/timofurrer/retry"
+homepage = "https://github.com/timofurrer/retry-cmd"
+repository = "https://github.com/timofurrer/retry-cdm"
 edition = "2018"
 
 [[bin]]
 name = "retry-cmd"
-path = "src/main.rs"
 
 [dependencies]
 clap = "2"
+colored = "2"
+
+[profile.release]
+strip = true  # Automatically strip symbols from the binary.
+opt-level = "z"  # Optimize for size.
+lto = true

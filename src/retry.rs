@@ -1,6 +1,7 @@
 use std::process::{Command, Stdio};
 use std::thread;
 use std::time::Duration;
+use colored::Colorize;
 
 #[derive(Debug)]
 pub struct RetryConfig<'a> {
@@ -34,22 +35,22 @@ pub fn retry(config: RetryConfig) {
             .status()
         {
             Ok(s) => s,
-            Err(err) => panic!("Failed to execute command: {}", err),
+            Err(err) => panic!("{} {}", "Failed to execute command:".red(), err),
         };
-
         match status.code() {
             Some(code) if code == config.expected_exitcode => {
-                println!("Successfully ran command. Abort retry.");
+                println!("{}", "Successfully ran command. Abort retry.".green());
                 break;
             }
-            Some(code) => println!("[Retry {}] Command failed with exit code {}", i, code),
-            None => println!(
-                "[Retry {}] Command failed because it was termianted by a signal",
-                i
+            Some(code) => println!("{}", format!("[Retry {i}] Command failed with exit code {code}").yellow()),
+            None => println!("{}",
+                format!("[Retry {i}] Command failed because it was termianted by a signal").red(),
             ),
         }
 
         if i != config.max {
+            let f = format!("{} {:?} {}...","Waiting", config.interval, "seconds").purple();
+            println!("{}",f);
             thread::sleep(config.interval);
         }
 

@@ -1,5 +1,4 @@
 mod retry;
-
 use std::time::Duration;
 
 #[macro_use]
@@ -7,6 +6,7 @@ extern crate clap;
 use clap::{App, AppSettings, Arg};
 
 use retry::retry;
+use colored::Colorize;
 
 
 fn main() {
@@ -60,15 +60,15 @@ fn main() {
 
     let max_retries: u32 = match matches.value_of("max").unwrap_or_default().parse() {
         Ok(u) => u,
-        Err(_) => panic!("The given MAX option must be an Integer"),
+        Err(_) => panic!("{}","The given MAX option must be an Integer".red()),
     };
     let interval = Duration::from_secs(match matches.value_of("interval").unwrap_or_default().parse() {
         Ok(u) => u,
-        Err(_) => panic!("The given INTERVAL option must be an Integer"),
+        Err(_) => panic!("{}", "The given INTERVAL option must be an Integer".red()),
     });
     let exitcode = match matches.value_of("exit_code").unwrap_or_default().parse() {
         Ok(c) => c,
-        Err(_) => panic!("The given exit code option must be an Integer"),
+        Err(_) => panic!("{}","The given exit code option must be an Integer".red()),
     };
     let quiet = matches.is_present("quiet");
     let cmd: Vec<&str> = matches.values_of("command").unwrap().collect();
