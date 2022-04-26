@@ -19,5 +19,5 @@ retry --quiet -- curl -I https://unstable.site
 ## Installation
 
 ```
-cargo install retry-cmd
+cargo install --git https://github.com/jniltinho/retry-cmd.git
 ```
