@@ -1,0 +1,58 @@
+name: "Build Bin"
+
+on:
+  push:
+    branches:
+      - prod
+env:
+  GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+  commit_message: ${{github.event.head_commit.message}}
+  AUTHOR: '${{github.event.pusher.name}}\<${{github.event.pusher.email}}\>'
+  AUTHOR_URL: 'https://github.com/${{github.event.pusher.name}}'
+  RETRY: 'retry-cli --duration 60'
+
+
+jobs:
+  build-bin-rust:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/jniltinho/rust-cross-mac:latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set Vars
+        run: |
+           echo "MESSAGE=$(echo '${{github.event.head_commit.message}}'|head -n 1)" >> $GITHUB_ENV
+           echo "repo_name=${GITHUB_REPOSITORY#*/}" >> $GITHUB_ENV
+           echo "current_date=$(date +'%Y-%m-%d %H:%M')" >> $GITHUB_ENV
+           echo "app_version=${GITHUB_REPOSITORY#*/}-$(date +'%Y%m%d-%H%M')" >> $GITHUB_ENV
+           echo "release_from=${GITHUB_REF_NAME}" >> $GITHUB_ENV
+
+      - name: Add new Target
+        run: rustup target add x86_64-apple-darwin; rustup target add x86_64-pc-windows-gnu
+
+      - name: Compile Rust App
+        run: make build; make build-win; make build-mac; make run-upx; make create-tar
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        with:
+           tag_name: ${{env.app_version}}
+           release_name: Release ${{env.app_version}}
+           body: |
+               Changes in this Release
+               - Release from: ${{env.release_from}}
+               - Data do Release: ${{env.current_date}}
+               - Github Author: ${{env.AUTHOR_URL}}
+               - Commit: ${{github.sha}}
+               - Commit Message: ${{env.MESSAGE}}
+           draft: false
+           prerelease: false
+
+      - name: Upload Asset Release
+        run: |
+           ${RETRY} gh release upload "${{env.app_version}}" ${{env.repo_name}}-linux64.tar.gz
+           ${RETRY} gh release upload "${{env.app_version}}" ${{env.repo_name}}-win64.tar.gz
+           ${RETRY} gh release upload "${{env.app_version}}" ${{env.repo_name}}-mac64.tar.gz
+
+
