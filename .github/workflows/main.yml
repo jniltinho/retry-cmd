@@ -27,9 +27,6 @@ jobs:
            echo "app_version=${GITHUB_REPOSITORY#*/}-$(date +'%Y%m%d-%H%M')" >> $GITHUB_ENV
            echo "release_from=${GITHUB_REF_NAME}" >> $GITHUB_ENV
 
-      - name: Add new Target
-        run: rustup target add x86_64-apple-darwin; rustup target add x86_64-pc-windows-gnu
-
       - name: Config Mac Build
         run: mkdir -p .cargo; cp /opt/rust/cargo_config .cargo/config
 
