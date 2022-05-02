@@ -34,7 +34,7 @@ jobs:
         run: mkdir -p .cargo; cp /opt/rust/cargo_config .cargo/config
 
       - name: Compile Rust App
-        run: make build build-win build-mac; make run-upx; make create-tar
+        run: make install-target; make build build-win build-mac; make run-upx; make create-tar
 
       - name: Create Release
         id: create_release
