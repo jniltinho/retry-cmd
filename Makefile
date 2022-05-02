@@ -24,7 +24,7 @@ run-upx:
 	ls -sh target/release/$(PACKAGE_NAME)
 	upx --best --lzma target/release/$(PACKAGE_NAME)
 	upx --best --lzma target/x86_64-pc-windows-gnu/release/$(PACKAGE_NAME).exe
-	upx --best --lzma target/x86_64-apple-darwin/release/$(PACKAGE_NAME)
+	#upx --best --lzma target/x86_64-apple-darwin/release/$(PACKAGE_NAME)
 
 
 create-tar:
@@ -34,8 +34,8 @@ create-tar:
 	rm -f $(PACKAGE_NAME)
 	cp target/x86_64-pc-windows-gnu/release/$(PACKAGE_NAME).exe .
 	tar -zcf $(PACKAGE_NAME)-win64.tar.gz $(PACKAGE_NAME).exe
-	cp target/x86_64-apple-darwin/release/$(PACKAGE_NAME) .
-	tar -zcf $(PACKAGE_NAME)-mac64.tar.gz $(PACKAGE_NAME)
+	#cp target/x86_64-apple-darwin/release/$(PACKAGE_NAME) .
+	#tar -zcf $(PACKAGE_NAME)-mac64.tar.gz $(PACKAGE_NAME)
 	rm -f $(PACKAGE_NAME).exe $(PACKAGE_NAME)
 	ls -ilah *.tar.gz
 
