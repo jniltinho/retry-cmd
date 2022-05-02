@@ -30,8 +30,11 @@ jobs:
       - name: Add new Target
         run: rustup target add x86_64-apple-darwin; rustup target add x86_64-pc-windows-gnu
 
+      - name: Config Mac Build
+        run: mkdir -p .cargo; cp /opt/rust/cargo_config .cargo/config
+
       - name: Compile Rust App
-        run: make build; make build-win; make run-upx; make create-tar
+        run: make build build-win build-mac; make run-upx; make create-tar
 
       - name: Create Release
         id: create_release
@@ -53,5 +56,6 @@ jobs:
         run: |
            ${RETRY} gh release upload "${{env.app_version}}" ${{env.repo_name}}-linux64.tar.gz
            ${RETRY} gh release upload "${{env.app_version}}" ${{env.repo_name}}-win64.tar.gz
+           ${RETRY} gh release upload "${{env.app_version}}" ${{env.repo_name}}-mac64.tar.gz
 
 
