@@ -17,6 +17,6 @@ clap = "2"
 colored = "2"
 
 [profile.release]
-strip = true  # Automatically strip symbols from the binary.
-opt-level = "z"  # Optimize for size.
-lto = true
+strip=true  # Automatically strip symbols from the binary.
+opt-level="z"  # Optimize for size.
+lto=true
