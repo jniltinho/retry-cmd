@@ -28,7 +28,7 @@ jobs:
            echo "release_from=${GITHUB_REF_NAME}" >> $GITHUB_ENV
 
       - name: Config Mac Build
-        run: mkdir -p .cargo; cp /opt/rust/cargo_config .cargo/config
+        run: mkdir -p .cargo; cp /opt/osxcross/cargo_config .cargo/config
 
       - name: Compile Rust App
         run: make install-target; make build build-win build-mac; make run-upx; make create-tar
