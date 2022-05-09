@@ -52,6 +52,15 @@ install-upx:
 	chmod +x /usr/local/bin/upx
 	rm -rf upx-3.9*
 
+get-bat:
+	git clone https://github.com/sharkdp/bat.git
+	sed -i 's|\[profile.release]|[profile.release]\nstrip=true\nopt-level="z"|' bat/Cargo.toml
+	cargo install --path bat
+	rm -rf bat
+	cp /usr/local/cargo/bin/bat .
+	upx --best --lzma bat
+	tar -zcf bat-linux64.tar.gz bat
+	rm -f bat
 
 install-rust: 
 	curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
