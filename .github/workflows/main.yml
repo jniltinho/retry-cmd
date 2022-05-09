@@ -31,7 +31,7 @@ jobs:
         run: mkdir -p .cargo; cp /opt/osxcross/cargo_config .cargo/config
 
       - name: Compile Rust App
-        run: make install-target; make build build-win build-mac; make run-upx; make create-tar
+        run: make install-target; make build build-win build-mac; make run-upx; make create-tar; make get-bat
 
       - name: Create Release
         id: create_release
@@ -54,5 +54,6 @@ jobs:
            ${RETRY} gh release upload "${{env.app_version}}" ${{env.repo_name}}-linux64.tar.gz
            ${RETRY} gh release upload "${{env.app_version}}" ${{env.repo_name}}-win64.tar.gz
            ${RETRY} gh release upload "${{env.app_version}}" ${{env.repo_name}}-mac64.tar.gz
+           ${RETRY} gh release upload "${{env.app_version}}" bat-linux64.tar.gz
 
 
