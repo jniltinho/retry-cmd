@@ -12,7 +12,8 @@ pub struct RetryConfig<'a> {
     pub cmd: Vec<&'a str>,
 }
 
-pub fn retry(config: RetryConfig) {
+pub fn retry(config: RetryConfig) -> i32 {
+    let mut exit_code = 0;
     let mut i = 1;
     while i <= config.max || config.max == 0 {
         let status = match Command::new(&config.cmd[0])
@@ -37,6 +38,7 @@ pub fn retry(config: RetryConfig) {
             Ok(s) => s,
             Err(err) => panic!("{} {}", "Failed to execute command:".red(), err),
         };
+        exit_code = status.code().unwrap();
         match status.code() {
             Some(code) if code == config.expected_exitcode => {
                 println!("{}", "Successfully ran command. Abort retry.".green());
@@ -56,4 +58,5 @@ pub fn retry(config: RetryConfig) {
 
         i += 1;
     }
+  exit_code
 }
