@@ -81,5 +81,6 @@ fn main() {
         cmd: cmd,
     };
 
-    retry(config);
+    let exit_code = retry(config);
+    std::process::exit(exit_code)
 }
